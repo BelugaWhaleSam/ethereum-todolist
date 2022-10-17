@@ -29,6 +29,39 @@ export default function App() {
   }
   const [correctNetwork, setCorrectNetwork] = useState(false);
 
+  // Get all task method
+
+  const getAllTasks = async () => { 
+    try {
+      const {ethereum} = window
+  
+      if(ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const TaskContract = new ethers.Contract(
+          TaskContractAddress,
+          TaskAbi.abi,
+          signer
+        )
+  
+        // allTasks is used to fetch all the tasks from the blockchain
+        let allTasks = await TaskContract.getMyTasks();
+        setTasks(allTasks);
+
+      } else {
+        console.log("Ethereum object doesn't exist");
+      }
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  // We use useEffect to call the connectWallet function when the page loads
+  useEffect(() => {
+    connectWallet();
+    getAllTasks();
+  }, []);
+
   {
     /* This will ensure that the user is connected to metamask */
   }
@@ -60,15 +93,80 @@ export default function App() {
     }
   };
 
+  // add task method
   const addTask = async () => {
-    let Task
-  };
-  const deleteTask = async () => {};
 
-  // We use useEffect to call the connectWallet function when the page loads
-  useEffect(() => {
-    connectWallet();
-  }, []);
+    let task = {
+      'taskText': input,
+      'isDeleted' : false,
+    };
+
+    try {
+      const {ethereum} = window;
+
+      if(ethereum) {
+
+        // To get the account address from users metamask and conncect to whatever is the first account we get from metamask
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        // signer is used to sign the transaction and send it to the blockchain
+        const signer  = provider.getSigner();
+        // contract is used to interact with the smart contract with the help of the abi and the address of the contract
+        const TaskContract = new ethers.Contract(
+          TaskContractAddress,
+          TaskAbi.abi,
+          signer
+        )
+
+        // This will add the task to the blockchain and .then is used to get the response from the blockchain
+        TaskContract.addTask(task.taskText, task.isDeleted)
+        .then(response => {
+          setTasks([...tasks, task]);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      }
+
+    }catch(error) {
+
+    }
+
+    setInput('');
+  };
+
+  // Delete task method
+  const deleteTask = key => async () => {
+
+    try {
+      const {ethereum} = window;
+
+      if(ethereum) {
+
+        // To get the account address from users metamask and conncect to whatever is the first account we get from metamask
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        // signer is used to sign the transaction and send it to the blockchain
+        const signer  = provider.getSigner();
+        // contract is used to interact with the smart contract with the help of the abi and the address of the contract
+        const TaskContract = new ethers.Contract(
+          TaskContractAddress,
+          TaskAbi.abi,
+          signer
+        )
+
+        // deletTx is used to delete the task by making a transaction and setting it to true
+        let deleteTx = await TaskContract.deleteTask(key,true);
+        // This is to fetch all the tasks from the blockchain
+        let allTasks = await TaskContract.getAllTasks();
+        // This is to set the tasks to the state
+        setTasks( allTasks );
+      }
+
+    }catch(error) {
+
+    }
+
+    setInput('');
+  };
 
   return (
     <>
@@ -111,7 +209,7 @@ export default function App() {
       ) : (
         <div className="flex flex-col justify-center items-center mb-20 font-bold text-2xl gap-y-3">
           <div>----------------------------------------</div>
-          <div>Please connect to the Rinkeby Testnet</div>
+          <div>Please connect to the Goerli Testnet</div>
           <div>and reload the page</div>
           <div>----------------------------------------</div>
         </div>

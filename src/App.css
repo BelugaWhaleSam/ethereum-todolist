@@ -1,6 +1,11 @@
 .App {
   text-align: center;
-  
+  backdrop-filter: blur(22px) saturate(200%);
+  -webkit-backdrop-filter: blur(22px) saturate(200%);
+  background-color: rgba(219, 212, 212, 0.63);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+
 }
 
 .App-logo {

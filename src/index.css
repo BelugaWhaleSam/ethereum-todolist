@@ -6,7 +6,13 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     
-  }
+    min-height: 100vh;
+    background-color: #ffffff;
+    background-image: 
+        radial-gradient(at 47% 33%, hsl(179.15, 100%, 50%) 0, transparent 59%), 
+        radial-gradient(at 82% 65%, hsl(359.00, 100%, 50%) 0, transparent 55%);
+}
+  
   
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

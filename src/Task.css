@@ -1,0 +1,15 @@
+.todo__list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1000px;
+  border: 1px solid rgb(0, 0, 0);
+  margin-bottom: 10px !important;
+}
+
+.Parent {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
