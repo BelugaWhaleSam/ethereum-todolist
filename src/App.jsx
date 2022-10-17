@@ -56,9 +56,8 @@ export default function App() {
     }
   }
 
-  // We use useEffect to call the connectWallet function when the page loads
+  // We use useEffect to get all tasks when the page loads
   useEffect(() => {
-    connectWallet();
     getAllTasks();
   }, []);
 
@@ -80,6 +79,7 @@ export default function App() {
       const goerliChainId = "0x5";
 
       if (chainId !== goerliChainId) {
+        alert('You are not connected to Goerli Test Network');
         return;
       } else {
         setCorrectNetwork(true);
@@ -94,7 +94,8 @@ export default function App() {
   };
 
   // add task method
-  const addTask = async () => {
+  const addTask = async (e) => {
+    e.preventDefault();
 
     let task = {
       'taskText': input,
@@ -169,7 +170,7 @@ export default function App() {
   };
 
   return (
-    <>
+    <div>
       {/* If the current account is not connected to metamask, then we will show the connect wallet button
      else we will check the correct network and show the add task button */}
       {currentAccount === "" ? (
@@ -214,6 +215,6 @@ export default function App() {
           <div>----------------------------------------</div>
         </div>
       )}
-    </>
+    </div>
   );
 }
